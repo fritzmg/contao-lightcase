@@ -1,0 +1,17 @@
+<?php
+
+$GLOBALS['TL_CSS'][] = 'system/modules/lightcase/assets/css/lightcase.css||static';
+$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/lightcase/assets/js/lightcase.js|static';
+
+?>
+
+<script>
+jQuery(document).ready(function($){
+  $('a[data-lightbox]').each(function(){
+    $(this).attr('data-lightbox','lightcase:'+$(this).data('lightbox')).lightcase({
+      attr: 'data-lightbox',
+      showCaption: false
+    });
+  });
+});
+</script>
