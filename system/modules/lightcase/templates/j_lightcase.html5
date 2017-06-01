@@ -8,11 +8,15 @@ $GLOBALS['TL_CSS'][] = 'system/modules/lightcase/assets/css/lightcase.css';
 <script src="system/modules/lightcase/assets/js/jquery.events.touch.js"></script>
 <script>
 jQuery(document).ready(function($){
-  $('a[data-lightbox]').lightcase({
-    attr: 'data-lightbox',
-    slideshow: true,
-    useAsCollection: true,
-    showCaption: false
+  $('a[data-lightbox]').each(function(){
+    var $this = $(this);
+    var c = $this.data('lightbox');
+    $this.lightcase({
+      attr: 'data-lightbox',
+      slideshow: true,
+      useAsCollection: c && $('[data-lightbox="'+c+'"]').length > 1,
+      showCaption: false
+    });
   });
 });
 </script>
