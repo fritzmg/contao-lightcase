@@ -1,17 +1,18 @@
 <?php
 
-$GLOBALS['TL_CSS'][] = 'system/modules/lightcase/assets/css/lightcase.css||static';
-$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/lightcase/assets/js/lightcase.js|static';
+$GLOBALS['TL_CSS'][] = 'system/modules/lightcase/assets/css/lightcase.css';
+$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/lightcase/assets/js/lightcase.js';
+$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/lightcase/assets/js/jquery.events.touch.js';
 
 ?>
 
 <script>
 jQuery(document).ready(function($){
-  $('a[data-lightbox]').each(function(){
-    $(this).attr('data-lightbox','lightcase:'+$(this).data('lightbox')).lightcase({
-      attr: 'data-lightbox',
-      showCaption: false
-    });
+  $('a[data-lightbox]').lightcase({
+    attr: 'data-lightbox',
+    slideshow: true,
+    useAsCollection: true,
+    showCaption: false
   });
 });
 </script>
