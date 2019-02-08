@@ -1,4 +1,4 @@
-[![](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/fritzmg/contao-lightcase)
+[![](https://img.shields.io/maintenance/yes/2019.svg)](https://github.com/fritzmg/contao-lightcase)
 [![](https://img.shields.io/packagist/v/fritzmg/contao-lightcase.svg)](https://packagist.org/packages/fritzmg/contao-lightcase)
 [![](https://img.shields.io/packagist/dt/fritzmg/contao-lightcase.svg)](https://packagist.org/packages/fritzmg/contao-lightcase)
 
