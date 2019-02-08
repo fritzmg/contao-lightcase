@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		2.4.0 (09/04/2017)
+ * @version		2.5.0 (11/03/2018)
  */
 
 ;(function ($) {
@@ -70,6 +70,7 @@
 				overlayOpacity: .9,
 				slideshow: false,
 				slideshowAutoStart: true,
+				breakBeforeShow: false,
 				timeout: 5000,
 				swipe: true,
 				useKeys: true,
@@ -167,11 +168,14 @@
 				},
 				onInit: {},
 				onStart: {},
+				onBeforeCalculateDimensions: {},
+				onAfterCalculateDimensions: {},
+				onBeforeShow: {},
 				onFinish: {},
 				onResize: {},
 				onClose: {},
 				onCleanup: {}
-			}, 
+			},
 			options,
 			// Load options from data-lc-options attribute
 			_self.origin.data ? _self.origin.data('lc-options') : {});
@@ -550,13 +554,20 @@
 							dataType: _self.objectData.requestDataType,
 							data: _self.objectData.requestData,
 							success: function (data, textStatus, jqXHR) {
-								// Unserialize if data is transferred as json
-								if (_self.objectData.requestDataType === 'json') {
-									_self.objectData.data = data;
-								} else {
-									$object.html(data);
+								// Check for X-Ajax-Location
+								if (jqXHR.getResponseHeader('X-Ajax-Location')) {
+									_self.objectData.url = jqXHR.getResponseHeader('X-Ajax-Location');
+									_self._loadObject($object);
 								}
-								_self._showContent($object);
+								else {
+									// Unserialize if data is transferred as json
+									if (_self.objectData.requestDataType === 'json') {
+										_self.objectData.data = data;
+									} else {
+										$object.html(data);
+									}
+									_self._showContent($object);
+								}
 							},
 							error: function (jqXHR, textStatus, errorThrown) {
 								_self.error();
@@ -612,6 +623,8 @@
 		 */
 		_calculateDimensions: function ($object) {
 			_self._cleanupDimensions();
+
+			if (!$object) return;
 
 			// Set default dimensions
 			var dimensions = {
@@ -726,7 +739,8 @@
 			});
 
 			_self.objects.case.css({
-				'width': _self.objects.contentInner.outerWidth()
+				'width': _self.objects.contentInner.outerWidth(),
+				'max-width': '100%'
 			});
 
 			// Adjust margin
@@ -784,7 +798,7 @@
 			return _self._normalizeUrl(dataUrl.toString());
 		},
 
-			// 
+			//
 		/**
 		 * Tries to get the (file) suffix of an url
 		 *
@@ -792,7 +806,8 @@
 		 * @return	{string}
 		 */
 		_getFileUrlSuffix: function (url) {
-			return url.toLowerCase().split('?')[0].split('.')[1];
+			var re = /(?:\.([^.]+))?$/;
+			return re.exec(url.toLowerCase())[1];
 		},
 
 		/**
@@ -855,11 +870,19 @@
 			_self.objects.document.attr(_self._prefixAttributeName('type'), _self.objectData.type);
 
 			_self.cache.object = $object;
-			_self._calculateDimensions($object);
 
-			// Call onFinish hook functions
-			_self._callHooks(_self.settings.onFinish);
+			// Call onBeforeShow hook functions
+			_self._callHooks(_self.settings.onBeforeShow);
 
+			if (_self.settings.breakBeforeShow) return;
+			_self.show();
+		},
+
+		/**
+		 * Starts the 'inTransition'
+		 * @return	{void}
+		 */
+		_startInTransition: function () {
 			switch (_self.transition.in()) {
 				case 'scrollTop':
 				case 'scrollRight':
@@ -874,7 +897,7 @@
 					if (_self.objects.case.css('opacity') < 1) {
 						_self.transition.zoom(_self.objects.case, 'in', _self.settings.speedIn);
 						_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
-					}
+				}
 				case 'fade':
 				case 'fadeInline':
 					_self.transition.fade(_self.objects.case, 'in', _self.settings.speedIn);
@@ -888,7 +911,7 @@
 			// End loading.
 			_self._loading('end');
 			_self.isBusy = false;
-			
+
 			// Set index of the first item opened
 			if (!_self.cache.firstOpened) {
 				_self.cache.firstOpened = _self.objectData.this;
@@ -897,8 +920,11 @@
 			// Fade in the info with delay
 			_self.objects.info.hide();
 			setTimeout(function () {
-			  _self.transition.fade(_self.objects.info, 'in', _self.settings.speedIn);
+				 _self.transition.fade(_self.objects.info, 'in', _self.settings.speedIn);
 			}, _self.settings.speedIn);
+
+			// Call onFinish hook functions
+			_self._callHooks(_self.settings.onFinish);
 		},
 
 		/**
@@ -1302,6 +1328,7 @@
 				startTransition['opacity'] = startOpacity;
 				endTransition['opacity'] = endOpacity;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1391,6 +1418,7 @@
 				endTransition['opacity'] = endOpacity;
 				endTransition[direction] = endOffset;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1440,6 +1468,7 @@
 
 				endTransition['opacity'] = endOpacity;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1512,15 +1541,43 @@
 
 		/**
 		 * Executes functions for a window resize.
-		 * It stops an eventual timeout and recalculates dimenstions.
+		 * It stops an eventual timeout and recalculates dimensions.
 		 *
+		 * @param	{object}	dimensions
 		 * @return	{void}
 		 */
-		resize: function () {
+		resize: function (event, dimensions) {
 			if (!_self.isOpen) return;
 
 			if (_self.isSlideshowEnabled()) {
 				_self._stopTimeout();
+			}
+
+			if (typeof dimensions === 'object' && dimensions !== null) {
+				if (dimensions.width) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('width'),
+						dimensions.width
+					);
+				}
+				if (dimensions.maxWidth) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('max-width'),
+						dimensions.maxWidth
+					);
+				}
+				if (dimensions.height) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('height'),
+						dimensions.height
+					);
+				}
+				if (dimensions.maxHeight) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('max-height'),
+						dimensions.maxHeight
+					);
+				}
 			}
 
 			_self.dimensions = _self.getViewportDimensions();
@@ -1619,6 +1676,21 @@
 
 			_self.objects.document.addClass(_self.settings.classPrefix + 'open');
 			_self.objects.case.attr('aria-hidden', 'false');
+		},
+
+		/**
+		 * Shows the lightcase by starting the transition
+		 */
+		show: function () {
+			// Call onCalculateDimensions hook functions
+			_self._callHooks(_self.settings.onBeforeCalculateDimensions);
+
+			_self._calculateDimensions(_self.cache.object);
+
+			// Call onAfterCalculateDimensions hook functions
+			_self._callHooks(_self.settings.onAfterCalculateDimensions);
+
+			_self._startInTransition();
 		},
 
 		/**

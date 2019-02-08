@@ -5,7 +5,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/lightcase/assets/css/lightcase.css';
 ?>
 
 <script src="system/modules/lightcase/assets/js/lightcase.js"></script>
-<script src="system/modules/lightcase/assets/js/jquery.events.touch.js"></script>
+<script src="system/modules/lightcase/assets/js/jquery.events.touch.min.js"></script>
 <script>
 jQuery(document).ready(function($){
   $('a[data-lightbox]').each(function(){
