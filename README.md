@@ -17,7 +17,7 @@ Lightcase will work with all links that use the `data-lightbox="…"` parameter.
 
 By default Lightcase shows the image with a `maxHeight` of 500 pixels and a `maxWidth` of 800 pixels.
 
-You can change these values by creating a custom `j_lightcase.html5` template and adjusting the content as follows:
+You can change these values by creating a custom `j_lightcase` template and adjusting the content as follows:
 
 ```js
 $this.lightcase({
