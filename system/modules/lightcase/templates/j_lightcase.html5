@@ -15,7 +15,18 @@ jQuery(document).ready(function($){
       attr: 'data-lightbox',
       slideshow: true,
       useAsCollection: c && $('[data-lightbox="'+c+'"]').length > 1,
-      showCaption: false
+      showCaption: false,
+<?php if ('en' !== $GLOBALS['TL_LANGUAGE'] && isset($GLOBALS['TL_LANG']['LIGHTCASE'])): ?>
+      labels: {
+        'errorMessage': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['errorMessage'] ?>',
+        'sequenceInfo.of': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['sequenceInfo.of'] ?>',
+        'close': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['close'] ?>',
+        'navigator.prev': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['navigator.prev'] ?>',
+        'navigator.next': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['navigator.next'] ?>',
+        'navigator.play': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['navigator.play'] ?>',
+        'navigator.pause': '<?= $GLOBALS['TL_LANG']['LIGHTCASE']['navigator.pause'] ?>',
+      }
+<?php endif; ?>
     });
   });
 });
