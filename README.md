@@ -13,20 +13,24 @@ Simply activate the `j_lightcase` template in your page layout under _jQuery_. D
 
 Lightcase will work with all links that use the `data-lightbox="…"` parameter. Of course you can still initialize via your own JavaScript. Customizing the options works the same way as with the `j_colorbox` template for example.
 
-## Adjust image size
+## Adjust Labels
 
-By default Lightcase shows the image with a `maxHeight` of 500 pixels and a `maxWidth` of 800 pixels.
+In order to adjust the translation of the labels within your application (or to create translations for additional languages), create files in the following format:
 
-You can change these values by creating a custom `j_lightcase` template and adjusting the content as follows:
-
-```js
-$this.lightcase({
-  attr: 'data-lightbox',
-  slideshow: true,
-  useAsCollection: c && $('[data-lightbox="'+c+'"]').length > 1,
-  showCaption: false,
-  …,
-  maxWidth: 1920,
-  maxHeight: 1920
-});
 ```
+translations/im_contao_lightcase.<LANGUAGE>.yaml
+```
+
+For example if you want to change the English and German label of the close button:
+
+```yaml
+# translations/im_contao_lightcase.en.yaml
+close: Close overlay
+```
+
+```yaml
+# translations/im_contao_lightcase.de.yaml
+close: Overlay schließen
+```
+
+See the [API documentation](https://cornel.bopp-art.com/lightcase/documentation/#api) for the available labels.

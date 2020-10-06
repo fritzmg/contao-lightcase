@@ -1,34 +1,47 @@
 {
-    "name":"fritzmg/contao-lightcase",
-    "description":"Contao extension to integrate the Lightcase overlay.",
-    "keywords":["contao", "lightcase", "overlay"],
-    "type":"contao-module",
-    "homepage":"http://www.inspiredminds.at",
-    "license":"LGPL-3.0-or-later",
-    "authors":[
+    "name": "fritzmg/contao-lightcase",
+    "description": "Contao extension to integrate the Lightcase overlay.",
+    "keywords": ["contao", "lightcase", "overlay"],
+    "type": "contao-bundle",
+    "homepage": "http://www.inspiredminds.at",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
         {
-            "name":"Fritz Michael Gschwantner",
-            "homepage":"http://www.inspiredminds.at",
-            "email":"fmg@inspiredminds.at",
-            "role":"Developer"
+            "name": "Fritz Michael Gschwantner",
+            "homepage": "http://www.inspiredminds.at",
+            "email": "fmg@inspiredminds.at",
+            "role": "Developer"
         }
     ],
-    "support":{
-        "email":"fmg@inspiredminds.at",
-        "issues":"https://github.com/fritzmg/contao-lightcase/issues",
-        "source":"https://github.com/fritzmg/contao-lightcase",
-        "forum":"https://community.contao.org/de"
+    "support": {
+        "email": "fmg@inspiredminds.at",
+        "issues": "https://github.com/fritzmg/contao-lightcase/issues",
+        "source": "https://github.com/fritzmg/contao-lightcase",
+        "forum": "https://community.contao.org/de"
     },
-    "require":{
-        "php":">=5.4",
-        "contao/core-bundle":"~3.0 || ~4.2",
-        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0"
-    },
-    "extra":{
-        "contao":{
-            "sources": {
-                "system/modules/lightcase":"system/modules/lightcase"
-            }
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/fritzmg"
         }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "contao/core-bundle": "^4.9",
+        "symfony/config": "^4.4 || ^5.1",
+        "symfony/contracts": "*",
+        "symfony/dependency-injection": "^4.4 || ^5.1",
+        "symfony/http-kernel": "^4.4 || ^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "InspiredMinds\\ContaoLightcase\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "InspiredMinds\\ContaoLightcase\\ContaoManager\\Plugin"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16"
     }
 }

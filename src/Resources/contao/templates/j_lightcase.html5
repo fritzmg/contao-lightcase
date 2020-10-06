@@ -1,0 +1,27 @@
+<?php 
+
+use Contao\Template;
+
+$GLOBALS['TL_CSS'][] = 'bundles/contaolightcase/css/lightcase.css'; 
+
+?>
+<?= Template::generateScriptTag('bundles/contaolightcase/js/lightcase.js', false, null) ?>
+<?= Template::generateScriptTag('bundles/contaolightcase/js/jquery.events.touch.min.js', false, null) ?>
+<script>
+jQuery(document).ready(function($){
+  $('a[data-lightbox]').each(function(){
+    var $this = $(this);
+    var c = $this.data('lightbox');
+    $this.lightcase({
+      attr: 'data-lightbox',
+      slideshow: true,
+      useAsCollection: c && $('[data-lightbox="'+c+'"]').length > 1,
+      showCaption: false,
+      maxWidth: 1920,
+      maxHeight: 1920,
+      shrinkFactor: 0.8,
+      labels: <?= json_encode($this->getLightcaseLabels()) ?>
+    });
+  });
+});
+</script>

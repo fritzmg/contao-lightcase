@@ -1,0 +1,3 @@
+services:
+    InspiredMinds\ContaoLightcase\EventListener\ParseTemplateListener:
+        arguments: ['@translator']
