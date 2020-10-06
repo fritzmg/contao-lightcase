@@ -29,7 +29,6 @@
         "php": ">=7.2",
         "contao/core-bundle": "^4.9",
         "symfony/config": "^4.4 || ^5.1",
-        "symfony/contracts": "*",
         "symfony/dependency-injection": "^4.4 || ^5.1",
         "symfony/http-kernel": "^4.4 || ^5.1"
     },
