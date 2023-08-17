@@ -224,7 +224,7 @@
 				objectData = {
 				this: $(object),
 				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
-				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
+				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.find('img').attr('alt'),
 				url: _self._determineUrl(),
 				requestType: _self.settings.ajax.type,
 				requestData: _self.settings.ajax.data,
